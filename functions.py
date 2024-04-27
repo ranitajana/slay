@@ -129,23 +129,43 @@ def ask_ques(notes): #, lesson_plan):
 
 
 def save_ques(questions):
-    data = json.loads(questions)
-
-    # Initialize arrays to store questions, options, and answers
+    parsed_data = json.loads(questions)
+    # Initialize lists to store questions, options, and answers
     questions_options = []
     answers = []
-
-    # Iterate over each question in the JSON data
-    for question_data in data['questions']:
+    # Iterate over each question
+    for question_data in parsed_data['questions']:
         question = question_data['question']
         options = question_data['options']
         answer = question_data['answer']
-        # Append the question and options to the 2D array
-        questions_options.append([question] + options)
-        # Append the answer to the answers array
+        # Append a tuple containing the question and options to the questions_options list
+        questions_options.append((question, options))
+        # Append the answer to the answers list
         answers.append(answer)
+    return questions_options, answers
+    
+    
+    
+    
+    
+# def save_ques(questions):
+#     data = json.loads(questions)
 
-    return questions_options, answers 
+#     # Initialize arrays to store questions, options, and answers
+#     questions_options = []
+#     answers = []
+
+#     # Iterate over each question in the JSON data
+#     for question_data in data['questions']:
+#         question = question_data['question']
+#         options = question_data['options']
+#         answer = question_data['answer']
+#         # Append the question and options to the 2D array
+#         questions_options.append([question] + options)
+#         # Append the answer to the answers array
+#         answers.append(answer)
+
+#     return questions_options, answers 
 
     
 # def save_ques(questions): 
