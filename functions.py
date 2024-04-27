@@ -139,7 +139,7 @@ def save_ques(questions):
         options = question_data['options']
         answer = question_data['answer']
         # Append a tuple containing the question and options to the questions_options list
-        questions_options.append((question, options))
+        questions_options.append([question, options])
         # Append the answer to the answers list
         answers.append(answer)
     return questions_options, answers
