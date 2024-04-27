@@ -128,29 +128,49 @@ def ask_ques(notes): #, lesson_plan):
     return questions
 
 
-def save_ques(questions): 
-    # Load the JSON data from the string
+def save_ques(questions):
     data = json.loads(questions)
 
-    # Open the files for writing
-    with open('questions.jsonl', 'w') as questions_file, open('answers.jsonl', 'w') as answers_file:
-        # Iterate over each question in the JSON data
-        for question in data['questions']:
-            # Extract the question and options
-            question_text = question['question']
-            options = question['options']
+    # Initialize arrays to store questions, options, and answers
+    questions_options = []
+    answers = []
+
+    # Iterate over each question in the JSON data
+    for question_data in data['questions']:
+        question = question_data['question']
+        options = question_data['options']
+        answer = question_data['answer']
+        # Append the question and options to the 2D array
+        questions_options.append([question] + options)
+        # Append the answer to the answers array
+        answers.append(answer)
+
+    return questions_options, answers 
+
+    
+# def save_ques(questions): 
+#     # Load the JSON data from the string
+#     data = json.loads(questions)
+
+#     # Open the files for writing
+#     with open('questions.jsonl', 'w') as questions_file, open('answers.jsonl', 'w') as answers_file:
+#         # Iterate over each question in the JSON data
+#         for question in data['questions']:
+#             # Extract the question and options
+#             question_text = question['question']
+#             options = question['options']
         
-            # Create a dictionary for the question and options
-            question_data = {
-                'question': question_text,
-                'options': options
-            }
+#             # Create a dictionary for the question and options
+#             question_data = {
+#                 'question': question_text,
+#                 'options': options
+#             }
         
-            # Write the question and options to the questions.jsonl file
-            questions_file.write(json.dumps(question_data) + '\n')
+#             # Write the question and options to the questions.jsonl file
+#             questions_file.write(json.dumps(question_data) + '\n')
         
-            # Extract the answer
-            answer = question['answer']
+#             # Extract the answer
+#             answer = question['answer']
         
-            # Write the answer to the answers.jsonl file
-            answers_file.write(json.dumps(answer) + '\n')
+#             # Write the answer to the answers.jsonl file
+#             answers_file.write(json.dumps(answer) + '\n')
