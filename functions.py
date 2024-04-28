@@ -34,13 +34,11 @@ def speech_to_text(url):
         yt = YouTube(url)
         # Get the audio stream with itag 139
         audio_stream = yt.streams.get_by_itag(139)
-        print('audio_stream generated')
         # Get the buffer data from the stream
         buffer_data = io.BytesIO()
         audio_stream.stream_to_buffer(buffer_data)
         # Reset the buffer's position to the beginning
         buffer_data.seek(0)
-        print('buffer_data generated')
         deepgram = DeepgramClient(api.DEEPGRAM_API_KEY)
         payload: FileSource = {
             "buffer": buffer_data,
@@ -114,36 +112,40 @@ def lecture_notes(lesson_plan, transcript):
     structured_notes = response.choices[0].message.content
     return structured_notes
 
-def ask_ques(notes): #, lesson_plan):
-    # Prepare the prompt for GPT-3.5
-    prompt = f"Given the following notes:\n{notes} generate 5 set of multiple option type questions and answers with 4 options for each question. Give the output in json format with each question, its 4 options and the right answer as one json object."
-    token_size = len(notes.split())
-    if (token_size < 3000):
-        model_name = 'gpt-3.5-turbo'
-        maximum = 1000
-    else:
-        model_name = 'gpt-4-turbo'
-        maximum = 1000
-    response = openai.ChatCompletion.create(
-        model = model_name,
-        messages=[
-        {"role": "system", "content": "You are a helpful assistant. You answer what is asked without any introduction and followup narrative."},
-        {"role": "user", "content": prompt}
-        ],
-        #max_tokens= maximum,
-        # n=1,
-        # stop=None,
-        temperature=0.
-    )
+def ask_ques(notes,  max_retries=5): #, lesson_plan):
+    retry_count = 0
+    while retry_count < max_retries:
+        # Prepare the prompt for GPT-3.5
+        prompt = f"Given the following notes:\n{notes} generate 5 set of multiple option type questions and answers with 4 options for each question. Give the output in json format with each question, its 4 options and the right answer as one json object."
+        token_size = len(notes.split())
+        if (token_size < 3000):
+            model_name = 'gpt-3.5-turbo'
+            maximum = 1000
+        else:
+            model_name = 'gpt-4-turbo'
+            maximum = 1000
+        response = openai.ChatCompletion.create(
+            model = model_name,
+            messages=[
+            {"role": "system", "content": "You are a helpful assistant. You answer what is asked without any introduction and followup narrative."},
+            {"role": "user", "content": prompt}
+            ],
+            #max_tokens= maximum,
+            # n=1,
+            # stop=None,
+            temperature=0.
+        )
 
-    # Extract the generated notes from the API response
-    questions = response.choices[0].message.content
-    # try:
-    #     json.loads(questions)
-    # except ValueError as e:
-    #     return False
-    # return True
-    return questions
+        # Extract the generated notes from the API response
+        questions = response.choices[0].message.content
+        try:
+            json.loads(questions)
+            return questions
+        except ValueError as e:
+            retry_count += 1
+    
+    # If the function reaches this point, it means it failed to generate a valid JSON object after max_retries attempts
+    return False
 
     
 def save_ques(questions):
