@@ -149,8 +149,8 @@ def show_quiz(ques, ans):
     count = len(ans)
     for i in range(count):
         print('Question:', ques[i][0])
-        for i, option in enumerate(ques[i][1], start=1):
-            print(f"{i}. {option}")
+        for j, option in enumerate(ques[i][1], start=1):
+            print(f"{j}. {option}")
         print('\n')
         print('Correct answer:', ans[i], '\n')
 
