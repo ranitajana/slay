@@ -1,4 +1,7 @@
+<div style="background-color: #f1f1f1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+
 # slay
+
 This is the codebase for an AI assisted teaching assistant 'Slay'.
 
 The code takes the YouTube URL of a video lecture and a lesson plan as an input and returns the lecture-notes in structured format based on the lesson plan. It also auto-generates a set of quiz. 
@@ -7,9 +10,6 @@ The code takes the YouTube URL of a video lecture and a lesson plan as an input 
 
 [Click here](https://slay.unsupervized.com/)
 
-<div style="background-color: #f1f1f1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
- This is a gray box.
-</div>
 
 ## If you want to use it from source:
 
@@ -50,13 +50,7 @@ git clone https://github.com/ranitajana/slay.git
   ```
 - Replace `'your-openai-api-key'` and `'your-deepgram-api-key'` with your actual API keys obtained in step 3.
 
-## Usage
-
-Instructions for using your project go here.
-
-## Contributing
-
-Guidelines for contributing to your project go here.
+## Examples
 
 
 
