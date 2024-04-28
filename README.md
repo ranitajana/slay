@@ -52,7 +52,10 @@ git clone https://github.com/ranitajana/slay.git
 
 ### Use Jupyter notebook to use the teaching assistant
 
-Run ```jupyter lab``` in terminal from the project root directory and open `slay.ipynb`. Follow the instructions in the Jupyter notebook to generate notes and quiz fromthe Youtube URL of the video lecture.   
+Run ```jupyter lab``` in terminal from the project root directory and open `slay.ipynb`. Follow the instructions in the Jupyter notebook to generate notes and quiz from the Youtube URL of the video lecture.
+
+
+![Image of slay.ipynb](https://photos.app.goo.gl/AyyCtDB7KeekJfft8)   
 
 
 
