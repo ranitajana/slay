@@ -22,7 +22,7 @@ pip install -r requirements.txt
 2. Clone the repository:
 
 ```
-git clone https://github.com/your-username/your-project.git
+git clone https://github.com/ranitajana/slay.git
 ```
 
 3. Obtain the necessary API keys:
