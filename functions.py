@@ -2,28 +2,26 @@
 from pytube import YouTube
 import re
 import API as api
-from deepgram import Deepgram
+# from deepgram import Deepgram
 import openai
 import json
 from deepgram import DeepgramClient, PrerecordedOptions, FileSource
-# import requests
-# import urllib.request
 import io
 
-def download_buffer(url):
-    # Create a YouTube object with the video URL
-    yt = YouTube(url)
-    # Get the audio stream with itag 139
-    audio_stream = yt.streams.get_by_itag(139)
-    # Get the buffer data from the stream
-    buffer_data = io.BytesIO()
-    audio_stream.stream_to_buffer(buffer_data)
-    # Reset the buffer's position to the beginning
-    buffer_data.seek(0)
-    # Save the buffer data to a file
-    # with open("audio.mp3", "wb") as file:
-    #     file.write(buffer_data.getvalue())
-    return buffer_data
+# def download_buffer(url):
+#     # Create a YouTube object with the video URL
+#     yt = YouTube(url)
+#     # Get the audio stream with itag 139
+#     audio_stream = yt.streams.get_by_itag(139)
+#     # Get the buffer data from the stream
+#     buffer_data = io.BytesIO()
+#     audio_stream.stream_to_buffer(buffer_data)
+#     # Reset the buffer's position to the beginning
+#     buffer_data.seek(0)
+#     # Save the buffer data to a file
+#     # with open("audio.mp3", "wb") as file:
+#     #     file.write(buffer_data.getvalue())
+#     return buffer_data
 
 def format_time(seconds):
     hours = int(seconds // 3600)
@@ -31,10 +29,21 @@ def format_time(seconds):
     secs = seconds % 60
     return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
 
-def speech_to_text(audio_content):
+def speech_to_text(url):
+        # Create a YouTube object with the video URL
+        yt = YouTube(url)
+        # Get the audio stream with itag 139
+        audio_stream = yt.streams.get_by_itag(139)
+        print('audio_stream generated')
+        # Get the buffer data from the stream
+        buffer_data = io.BytesIO()
+        audio_stream.stream_to_buffer(buffer_data)
+        # Reset the buffer's position to the beginning
+        buffer_data.seek(0)
+        print('buffer_data generated')
         deepgram = DeepgramClient(api.DEEPGRAM_API_KEY)
         payload: FileSource = {
-            "buffer": audio_content,
+            "buffer": buffer_data,
         }
         options = PrerecordedOptions(
             model="nova-2",
@@ -129,6 +138,11 @@ def ask_ques(notes): #, lesson_plan):
 
     # Extract the generated notes from the API response
     questions = response.choices[0].message.content
+    # try:
+    #     json.loads(questions)
+    # except ValueError as e:
+    #     return False
+    # return True
     return questions
 
     
