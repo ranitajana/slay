@@ -50,7 +50,9 @@ git clone https://github.com/ranitajana/slay.git
   ```
 - Replace `'your-openai-api-key'` and `'your-deepgram-api-key'` with your actual API keys obtained in step 3.
 
-## Examples
+### Use Jupyter notebook to use the teaching assistant
+
+Run ```jupyter lab``` in terminal from the project root directory and open `slay.ipynb`. Follow the instructions in the Jupyter notebook to generate notes and quiz fromthe Youtube URL of the video lecture.   
 
 
 
