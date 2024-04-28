@@ -1,4 +1,0 @@
-#!/usr/bin/python
-
-DEEPGRAM_API_KEY = '0e21ce840d0605463dd3e5d628093008c37f4033'
-OpenAI_API_KEY = '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'
