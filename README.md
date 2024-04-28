@@ -55,7 +55,7 @@ git clone https://github.com/ranitajana/slay.git
 Run ```jupyter lab``` in terminal from the project root directory and open `slay.ipynb`. Follow the instructions in the Jupyter notebook to generate notes and quiz from the Youtube URL of the video lecture.
 
 
-![Image of slay.ipynb](https://photos.app.goo.gl/AyyCtDB7KeekJfft8)   
+![Image of slay.ipynb](https://lh3.googleusercontent.com/pw/AP1GczNifIXzTzqCn_i5x-OmLK9rU3r4PkYBDrYawmYHSoDmOyDeNWCtDOPqVtfRBB_RhX7YWd05BoYlmnUu5uCiQzM-BZmOtRTypDbC3COuXQnSgsRNdYE9rXCccUwfyeN8YyY9ny37RliIERumLR2PJAuW=w2378-h1548-s-no-gm?authuser=0)   
 
 
 
