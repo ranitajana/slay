@@ -5,18 +5,21 @@ The code takes the YouTube URL of a video lecture and a lesson plan as an input 
 
 ## Try it out here :
 
-[https://slay.unsupervized.com/]
+[Click here](https://slay.unsupervized.com/)
 
-## Requirements
+<div style="background-color: #f1f1f1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+ This is a gray box.
+</div>
+
+## If you want to use it from source:
+
+### Requirements
 
 - Python 3.10 or higher
 - OpenAI API key
 - Deepgram API key
 
-## Installation
-
-
-If you want to use it from source:
+### Installation
 
 1. Install the dependencies manually:
 
@@ -31,13 +34,13 @@ git clone https://github.com/ranitajana/slay.git
 
 3. Obtain the necessary API keys:
 - OpenAI API key:
-  - Visit [https://openai.com/] and sign up for an account.
+  - Visit [OpenAI](https://openai.com/) and sign up for an account.
   - Follow their instructions to generate an API key.
 - Deepgram API key:
-  - Visit [API Provider 2](https://api-provider-2.com) and sign up for an account.
+  - Visit [Deepgram](https://deepgram.com/) and sign up for an account.
   - Follow their instructions to generate an API key.
 
-4. Create a configuration file:
+4. Add your API keys in `API.py` file:
 
 - Open the file named `API.py` in the project root directory.
 - Add the following content to `API.py`:
@@ -55,6 +58,6 @@ Instructions for using your project go here.
 
 Guidelines for contributing to your project go here.
 
-## License
+
 
 
