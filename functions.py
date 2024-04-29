@@ -14,13 +14,6 @@ def format_time(seconds):
     secs = seconds % 60
     return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
 
-def seconds_to_timestamp(seconds, format="{:02d}:{:02d}:{:02d}"):
-    hours = int(seconds // 3600)
-    seconds %= 3600
-    minutes = int(seconds // 60)
-    seconds = int(seconds % 60)
-    return format.format(hours, minutes, seconds)
-
 def get_video_id(url):
     # Regular expression pattern to match the video ID
     pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11}).*"
@@ -48,8 +41,8 @@ def speech_to_text(url):
             duration = item['duration']
             end = start + duration
         
-            start_timestamp = seconds_to_timestamp(start)
-            end_timestamp = seconds_to_timestamp(end)
+            start_timestamp = format_time(start)
+            end_timestamp = format_time(end)
         
             formatted_text = f"[{start_timestamp} - {end_timestamp}] {text}\n"
             transcript += formatted_text
