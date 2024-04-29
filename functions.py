@@ -1,11 +1,12 @@
 #!/usr/bin/python
-from pytube import YouTube
+import io
 import re
-import API as api
 import openai
 import json
+import API as api
+from pytube import YouTube
 from deepgram import DeepgramClient, PrerecordedOptions, FileSource
-import io
+from youtube_transcript_api import YouTubeTranscriptApi
 
 def format_time(seconds):
     hours = int(seconds // 3600)
@@ -13,7 +14,47 @@ def format_time(seconds):
     secs = seconds % 60
     return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
 
+def seconds_to_timestamp(seconds, format="{:02d}:{:02d}:{:02d}"):
+    hours = int(seconds // 3600)
+    seconds %= 3600
+    minutes = int(seconds // 60)
+    seconds = int(seconds % 60)
+    return format.format(hours, minutes, seconds)
+
+def get_video_id(url):
+    # Regular expression pattern to match the video ID
+    pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11}).*"
+    # Find the video ID in the URL
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1)
+    else:
+        print('Not a valid Youtube URL')
+        return None
+
 def speech_to_text(url):
+    video_id = get_video_id(url)
+    list = YouTubeTranscriptApi.list_transcripts(video_id)
+    count = 0
+    for entry in list:
+        if (entry.language_code == 'en'):
+            count += 1 
+    if (count > 0):
+        transcript = ''
+        output = YouTubeTranscriptApi.get_transcript(video_id)
+        for item in output:
+            text = item['text'].replace('\n', ' ')
+            start = item['start']
+            duration = item['duration']
+            end = start + duration
+        
+            start_timestamp = seconds_to_timestamp(start)
+            end_timestamp = seconds_to_timestamp(end)
+        
+            formatted_text = f"[{start_timestamp} - {end_timestamp}] {text}\n"
+            transcript += formatted_text
+        return transcript
+    else:
         # Create a YouTube object with the video URL
         yt = YouTube(url)
         # Get the audio stream with itag 139
@@ -41,30 +82,28 @@ def speech_to_text(url):
         # response = deepgram.transcription.sync_prerecorded(payload, options)
         transcript = response['results']['channels'][0]['alternatives'][0]['transcript']    
         words = response['results']['channels'][0]['alternatives'][0]['words']
-        return transcript, words
+        # Split the transcript into sentences
+        sentences = re.split(r'(?<=[.!?])\s+', transcript)
 
-def subtitle(transcript,words):
-    # Split the transcript into sentences
-    sentences = re.split(r'(?<=[.!?])\s+', transcript)
+        # Create subtitles in SRT format
+        srt_subtitles = ''
+        subtitle_count = 1
+        word_index = 0
 
-    # Create subtitles in SRT format
-    srt_subtitles = ''
-    subtitle_count = 1
-    word_index = 0
-
-    for sentence in sentences:
-        sentence_words = sentence.split()
-        start_time = words[word_index]['start']
-        end_time = words[word_index + len(sentence_words) - 1]['end']
+        for sentence in sentences:
+            sentence_words = sentence.split()
+            start_time = words[word_index]['start']
+            end_time = words[word_index + len(sentence_words) - 1]['end']
     
-        srt_subtitles += f"{subtitle_count}\n"
-        srt_subtitles += f"{format_time(start_time)} --> {format_time(end_time)}\n"
-        srt_subtitles += f"{sentence}\n\n"
+            srt_subtitles += f"{subtitle_count}\n"
+            srt_subtitles += f"{format_time(start_time)} --> {format_time(end_time)}\n"
+            srt_subtitles += f"{sentence}\n\n"
     
-        subtitle_count += 1
-        word_index += len(sentence_words)
+            subtitle_count += 1
+            word_index += len(sentence_words)
 
-    return srt_subtitles
+        return srt_subtitles
+
 
 def lecture_notes(lesson_plan, transcript):
     openai.api_key = api.OpenAI_API_KEY
@@ -97,7 +136,7 @@ def ask_ques(notes,  max_retries=5): #, lesson_plan):
     retry_count = 0
     while retry_count < max_retries:
         # Prepare the prompt for GPT-3.5
-        prompt = f"Given the following notes:\n{notes} generate 5 set of multiple option type questions and answers with 4 options for each question. Give the output in json format with each question, its 4 options and the right answer as one json object."
+        prompt = f"Given the following notes:\n{notes} generate 5 set of multiple option type questions and answers with 4 options for each question. Give the output in json format with each question, its 4 options and the right answer as one json object"
         token_size = len(notes.split())
         if (token_size < 3000):
             model_name = 'gpt-3.5-turbo'
